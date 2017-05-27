@@ -12,12 +12,11 @@
     "58c5e8570f07ce84ff45e8c4":{
         "title":"致 一切美好的可能｜巡迴演唱會",
         "time":"2017/04/22 20:00:00",
-        "price":400,"address":
-        "臺北市西寧南路177號"}
+        "price":400,
+        "address":"臺北市西寧南路177號"}
     },
-
-"favorite" :
-    {"$user.uid":{
-        "$activity" : false ,
+"favorites" :
+    {"user_uid":{
+        "activity_id" : false}
     }
 }
