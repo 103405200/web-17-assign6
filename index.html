@@ -2,9 +2,11 @@
 <html lang="en">
 
   <head>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./style.css">
+    <meta charset="utf-8">
   </head>
 
   <body >
@@ -12,45 +14,43 @@
         <nav class="container">
             <h1 class="pull-left">獨立音樂活動清單</h1>
 
-            <div class="pull-left tabs">
-                <!-- 不同的分頁 -->
-                <span class="glyphicon glyphicon-th-large" ></span>
-                <span class="glyphicon glyphicon-star"     ></span>
-            </div>
-
             <div class="pull-right">
-                <!-- 不同的過濾器 -->
-                <span class="glyphicon glyphicon-time"     ></span>
-                <span class="glyphicon glyphicon-tag"      ></span>
-                <input type="text"  placeholder="過濾器">
+                <span class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#activityEditor" @click="editorCreateActivity()"></span>
+
+                <span v-if="data.currentUser"><img :src="data.currentUser.photoURL" alt="" width="30" height="30"></span>
+                <span v-if="data.currentUser" class="glyphicon glyphicon glyphicon-off" @click="logout()"></span>
+                <span v-else class="glyphicon glyphicon-user" @click="login()"></span>
+
             </div>
         </nav>
 
         <main class="container">
             <div class="items">
-                <article class="item" v-for="(activity ,activity_id) in activities" >
+
+
+                <article class="item" v-for="(activity ,activity_id) in activities">
                     <header>
-                        <h1>活動名</h1>
-                        <div class="animation-swipe star" >
+                        <h1>{{activity.title}} </h1>
+                        <div v-if="data.currentUser" class="animation-swipe star" :class="{ favorite : favorites[activity_id]  } " @click="toggle_like(activity_id)">
                           <span class="glyphicon glyphicon-star"></span>
                         </div>
                     </header>
 
                     <dl>
                         <dt>時間</dt>
-                        <dd>時間</dd>
+                        <dd>{{activity.time}}</dd>
                     </dl>
 
                     <dl>
                         <dt>價錢</dt>
-                        <dd>價錢</dd>
+                        <dd>{{activity.price}}</dd>
                     </dl>
 
                     <dl>
                         <dt>地點</dt>
-                        <dd>地點</dd>
+                        <dd>{{activity.address}}</dd>
                     </dl>
-                    <footer v-if="currentUser">
+                    <footer>
                         <span class="glyphicon glyphicon-remove" @click="removeActivity( activity_id )"></span>
                         <span class="glyphicon glyphicon-pencil" @click="editorEditActivity( activity_id , activity )"  data-toggle="modal" data-target="#activityEditor"></span>
                     </footer>
@@ -59,11 +59,70 @@
         </main>
 
         <footer class="container">
-            <span >目前資料總價</span >
-            <span >目前還沒有資料。</span >
+            <span v-if="activities && activities.length">{{total}}</span >
+            <span v-else>目前還沒有資料。</span >
         </footer>
 
+
+
+
+        <div class="modal fade" id="activityEditor" tabindex="-1" role="dialog" aria-labelledby="activityEditorLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="activityEditorLabel">{{editor.activity.title}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <form class="form-horizontal">
+                      <fieldset>
+                          <div class="form-group">
+                            <label class="col-md-4 control-label" for="title">活動名稱</label>
+                            <div class="col-md-4">
+                            <input id="title"  v-model="editor.activity.title" class="form-control input-md"  >
+                            </div>
+                          </div>
+
+                          <!-- Text input-->
+                          <div class="form-group">
+                            <label class="col-md-4 control-label" for="time">時間</label>
+                            <div class="col-md-4">
+                            <input id="time"  v-model="editor.activity.time" class="form-control input-md" >
+
+                            </div>
+                          </div>
+
+                          <!-- Text input-->
+                          <div class="form-group">
+                            <label class="col-md-4 control-label" for="address">地點</label>
+                            <div class="col-md-4">
+                            <input id="address" v-model="editor.activity.address"  class="form-control input-md" >
+
+                            </div>
+                          </div>
+
+                          <!-- Text input-->
+                          <div class="form-group">
+                            <label class="col-md-4 control-label" for="price">價錢</label>
+                            <div class="col-md-4">
+                            <input id="price" v-model="editor.activity.price" class="form-control input-md" >
+                            </div>
+                          </div>
+                      </fieldset>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                <button type="button" class="btn btn-primary" @click="editorSave" >儲存</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
     </div>
+
 
 
 
