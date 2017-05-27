@@ -28,8 +28,7 @@
 
         <main class="container">
             <div class="items">
-                <article class="item" >
-
+                <article class="item" v-for="(activity ,activity_id) in activities" >
                     <header>
                         <h1>活動名</h1>
                         <div class="animation-swipe star" >
@@ -51,7 +50,10 @@
                         <dt>地點</dt>
                         <dd>地點</dd>
                     </dl>
-
+                    <footer v-if="currentUser">
+                        <span class="glyphicon glyphicon-remove" @click="removeActivity( activity_id )"></span>
+                        <span class="glyphicon glyphicon-pencil" @click="editorEditActivity( activity_id , activity )"  data-toggle="modal" data-target="#activityEditor"></span>
+                    </footer>
                 </article>
             </div>
         </main>
@@ -71,27 +73,126 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.js"></script>
     <script>
 
-        $.getJSON("./show.min.json",function(json){
+        // ASN REQ 1 : replce all of  your config hrere
+            // var config = {
+            //   apiKey: "...",
+            //   authDomain: "music-6d81e.firebaseapp.com",
+            //   databaseURL: "https://music-6d81e.firebaseio.com",
+            //   projectId: "music-6d81e",
+            //   storageBucket: "music-6d81e.appspot.com",
+            //   messagingSenderId: "961648315314"
+            // };
+            // firebase.initializeApp(config);
 
-            window.app = new Vue({
-                el : "#app",
+        var db             = firebase.database()                  // class : firebase.database
+        var rootRef        = db.ref()
+
+        var activitiesRef  = rootRef.child("activities")              // class : firebase.reference -> root.activity
+        var favoritesRef   = rootRef.child("favorites")
+
+        var errorCallback  = function (msg){  alert(msg.message) }
+
+        window.app = new Vue({
+
+            el : "#app",
+            data : {
                 data : {
-                },
-                methods : {
-                    toggle_like : function (s){
-                        console.log(s)
-                    }
-                },
-                computed : {
-                    current_activities : function (){
+                    currentUser : null, // default is logout status
+                    favorites : {},
+                    activities : {}
 
-                    },
+                },
 
-                    total : function (){
-                    }
+                control : {
+                    filter : "" ,
+                    sort : "" ,
+                    tab : "all" ,
+                },
+
+                editor : {
+                    activity : {},
+                    activity_id : "" ,
+                    isCreating : false
                 }
-            })
+
+            },
+
+            methods : {
+                login : function (){
+                    // ASN REQ 3 : merely singIn with fb here
+
+                },
+                logout : function (){
+                    // ASN REQ 3  : signOut here
+                },
+
+                // ASN REQ 2 HINT: the two methods `editorCreateActivity` , `editorEditActivity` are used to open editor.
+                // you does not need to modify it.
+                editorCreateActivity: function(){
+                    this.editor.activity_id = null
+                    this.editor.activity = {
+                        title : "測試名稱",
+                        time : "",
+                        address : "",
+                        price : ""
+                    }
+                },
+                editorEditActivity : function ( activity_id , activity ){
+                    this.editor.activity_id = activity_id
+                    this.editor.activity = activity
+                },
+
+                // ASN REQ 2 HINT : if `this.editor.activity_id` equals null , it means the editor is creating a new activity!!
+                editorSave : function (){
+
+                    if ( this.editor.activity_id === null){
+                        // ASN REQ 2 : this means we are creating new activity
+                        // you should use one of the functions `updateActivity or createActivity` below
+
+                    }else {
+                        // ASN REQ 2 : this means we should UPDATE the activity whose id is `activity_id` , with this.editor.activity
+                        // you should use one of the functions `updateActivity or createActivity` below
+
+                    }
+                    $("#activityEditor").modal("hide")
+                },
+
+                toggle_like : function ( activity_id ){
+                    // ASN REQ 4 : update favoritesRef at `currentUser.uid ` at `activity_id` to true
+
+                },
+
+                // C , R , D
+                createActivity : function ( new_activity ){
+                    // ASN REQ 2 : push new_activity to activitiesRef. Always handle error!
+
+                },
+                updateActivity : function ( activity_id , activity ){
+                    // ASN REQ 2 : update activitiesRef at `activity_id` with data `activity`. Always handle error!
+
+                },
+                removeActivity : function ( activity_id ){
+                    // ASN REQ 2 : remove activity at `activity_id`. Always handle error!
+
+                }
+            },
+
+            created: function created() {
+              // ASN REQ 1 :
+                  // listen on chages on activities data , and set it to vm.data.activities
+
+              // ASN REQ 3 : detect authentication changes :
+                  // if login :
+                      // set login user to vm.data.currentUser
+                      // ASN REQ 4 :
+                      // listen on chages on favorite data of currentUser , and set it to vm.data.currentUser
+
+                  // else : not login :
+                      // reload this page!
+
+            }
         })
+
     </script>
 
   </body>
