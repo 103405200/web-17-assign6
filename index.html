@@ -51,8 +51,8 @@
                         <dd>{{activity.address}}</dd>
                     </dl>
                     <footer>
-                        <span class="glyphicon glyphicon-remove" @click="removeActivity( activity_id )"></span>
-                        <span class="glyphicon glyphicon-pencil" @click="editorEditActivity( activity_id , activity )"  data-toggle="modal" data-target="#activityEditor"></span>
+                        <span class="bn glyphicon glyphicon-remove" @click="removeActivity( activity_id )"></span>
+                        <span class="bn glyphicon glyphicon-pencil" @click="editorEditActivity( activity_id , activity )"  data-toggle="modal" data-target="#activityEditor"></span>
                     </footer>
                 </article>
             </div>
@@ -153,11 +153,11 @@
 
             el : "#app",
             data : {
+
                 data : {
                     currentUser : null, // default is logout status
                     favorites : {},
                     activities : {}
-
                 },
 
                 control : {
@@ -181,6 +181,7 @@
                 },
                 logout : function (){
                     // ASN REQ 3  : signOut here
+                    // Release favritesRef's value listener or just simply calling window.location.reload().
                 },
 
                 // ASN REQ 2 HINT: the two methods `editorCreateActivity` , `editorEditActivity` are used to open editor.
@@ -244,8 +245,8 @@
                       // ASN REQ 4 :
                       // listen on chages on favorite data of currentUser , and set it to vm.data.currentUser
 
-                  // else : not login :
-                      // reload this page!
+                  // else : not login : set vm.data.currentUser to null
+
 
             }
         })
