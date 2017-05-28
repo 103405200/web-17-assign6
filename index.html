@@ -10,118 +10,115 @@
   </head>
 
   <body >
-    <div id="app">
-        <nav class="container">
-            <h1 class="pull-left">獨立音樂活動清單</h1>
+      <div id="app">
+          <nav class="container">
+              <h1 class="pull-left">獨立音樂活動清單</h1>
 
-            <div class="pull-right">
-                <span class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#activityEditor" @click="editorCreateActivity()"></span>
+              <div class="pull-right">
+                  <span class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#activityEditor" @click="editorCreateActivity()"></span>
 
-                <span v-if="data.currentUser"><img :src="data.currentUser.photoURL" alt="" width="30" height="30"></span>
-                <span v-if="data.currentUser" class="glyphicon glyphicon glyphicon-off" @click="logout()"></span>
-                <span v-else class="glyphicon glyphicon-user" @click="login()"></span>
+                  <span v-if="data.currentUser"><img :src="data.currentUser.photoURL" alt="" width="30" height="30"></span>
+                  <span v-if="data.currentUser" class="glyphicon glyphicon glyphicon-off" @click="logout()"></span>
+                  <span v-else class="glyphicon glyphicon-user" @click="login()"></span>
 
-            </div>
-        </nav>
-
-        <main class="container">
-            <div class="items">
-
-
-                <article class="item" v-for="(activity ,activity_id) in activities">
-                    <header>
-                        <h1>{{activity.title}} </h1>
-                        <div v-if="data.currentUser" class="animation-swipe star" :class="{ favorite : favorites[activity_id]  } " @click="toggle_like(activity_id)">
-                          <span class="glyphicon glyphicon-star"></span>
-                        </div>
-                    </header>
-
-                    <dl>
-                        <dt>時間</dt>
-                        <dd>{{activity.time}}</dd>
-                    </dl>
-
-                    <dl>
-                        <dt>價錢</dt>
-                        <dd>{{activity.price}}</dd>
-                    </dl>
-
-                    <dl>
-                        <dt>地點</dt>
-                        <dd>{{activity.address}}</dd>
-                    </dl>
-                    <footer>
-                        <span class="bn glyphicon glyphicon-remove" @click="removeActivity( activity_id )"></span>
-                        <span class="bn glyphicon glyphicon-pencil" @click="editorEditActivity( activity_id , activity )"  data-toggle="modal" data-target="#activityEditor"></span>
-                    </footer>
-                </article>
-            </div>
-        </main>
-
-        <footer class="container">
-            <span v-if="activities && activities.length">{{total}}</span >
-            <span v-else>目前還沒有資料。</span >
-        </footer>
-
-
-
-
-        <div class="modal fade" id="activityEditor" tabindex="-1" role="dialog" aria-labelledby="activityEditorLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="activityEditorLabel">{{editor.activity.title}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
               </div>
-              <div class="modal-body">
-                  <form class="form-horizontal">
-                      <fieldset>
-                          <div class="form-group">
-                            <label class="col-md-4 control-label" for="title">活動名稱</label>
-                            <div class="col-md-4">
-                            <input id="title"  v-model="editor.activity.title" class="form-control input-md"  >
-                            </div>
+          </nav>
+
+          <main class="container">
+              <div class="items">
+
+                  <article class="item" v-for="(activity ,activity_id) in data.activities">
+                      <header>
+                          <h1>{{activity.title}} </h1>
+                          <div v-if="data.currentUser" class="animation-swipe star" :class="{ favorite : data.favorites[activity_id]  } " @click="toggle_like(activity_id)">
+                            <span class="glyphicon glyphicon-star"></span>
                           </div>
+                      </header>
+                      <dl>
+                          <dt>時間</dt>
+                          <dd>{{activity.time}}</dd>
+                      </dl>
 
-                          <!-- Text input-->
-                          <div class="form-group">
-                            <label class="col-md-4 control-label" for="time">時間</label>
-                            <div class="col-md-4">
-                            <input id="time"  v-model="editor.activity.time" class="form-control input-md" >
+                      <dl>
+                          <dt>價錢</dt>
+                          <dd>{{activity.price}}</dd>
+                      </dl>
 
-                            </div>
-                          </div>
-
-                          <!-- Text input-->
-                          <div class="form-group">
-                            <label class="col-md-4 control-label" for="address">地點</label>
-                            <div class="col-md-4">
-                            <input id="address" v-model="editor.activity.address"  class="form-control input-md" >
-
-                            </div>
-                          </div>
-
-                          <!-- Text input-->
-                          <div class="form-group">
-                            <label class="col-md-4 control-label" for="price">價錢</label>
-                            <div class="col-md-4">
-                            <input id="price" v-model="editor.activity.price" class="form-control input-md" >
-                            </div>
-                          </div>
-                      </fieldset>
-                  </form>
+                      <dl>
+                          <dt>地點</dt>
+                          <dd>{{activity.address}}</dd>
+                      </dl>
+                      <footer>
+                          <span class="bn glyphicon glyphicon-pencil" @click="editorEditActivity( activity_id , activity )"  data-toggle="modal" data-target="#activityEditor"></span>
+                          <span class="bn glyphicon glyphicon-remove" @click="removeActivity( activity_id )"></span>
+                      </footer>
+                  </article>
               </div>
-              <div class="modal-footer">
-                <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                <button type="button" class="btn btn-primary" @click="editorSave" >儲存</button>
+          </main>
+
+          <footer class="container">
+              <span v-if="data.activities && data.activities.length" >{{total}}</span >
+              <span v-else>目前還沒有資料。</span >
+          </footer>
+
+
+
+
+          <div class="modal fade" id="activityEditor" tabindex="-1" role="dialog" aria-labelledby="activityEditorLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="activityEditorLabel">{{editor.activity.title}}</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="title">活動名稱</label>
+                              <div class="col-md-4">
+                              <input id="title"  v-model="editor.activity.title" class="form-control input-md"  >
+                              </div>
+                            </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="time">時間</label>
+                              <div class="col-md-4">
+                              <input id="time"  v-model="editor.activity.time" class="form-control input-md" >
+
+                              </div>
+                            </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="address">地點</label>
+                              <div class="col-md-4">
+                              <input id="address" v-model="editor.activity.address"  class="form-control input-md" >
+
+                              </div>
+                            </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                              <label class="col-md-4 control-label" for="price">價錢</label>
+                              <div class="col-md-4">
+                              <input type="number" id="price" v-model="editor.activity.price" class="form-control input-md" >
+                              </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" @click="editorSave" >儲存</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-    </div>
+      </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -131,15 +128,15 @@
     <script>
 
         // ASN REQ 1 : replce all of  your config hrere
-            // var config = {
-            //   apiKey: "...",
-            //   authDomain: "music-6d81e.firebaseapp.com",
-            //   databaseURL: "https://music-6d81e.firebaseio.com",
-            //   projectId: "music-6d81e",
-            //   storageBucket: "music-6d81e.appspot.com",
-            //   messagingSenderId: "961648315314"
-            // };
-            // firebase.initializeApp(config);
+        var config = {
+            apiKey: "AIzaSyAh1HUyu2zeJ3VcqEFZTLirV29XYunFw_E",
+            authDomain: "good-d18bd.firebaseapp.com",
+            databaseURL: "https://good-d18bd.firebaseio.com",
+            projectId: "good-d18bd",
+            storageBucket: "good-d18bd.appspot.com",
+            messagingSenderId: "183018367198"
+        };
+        firebase.initializeApp(config);
 
         var db             = firebase.database()                  // class : firebase.database
         var rootRef        = db.ref()
@@ -189,10 +186,10 @@
                 editorCreateActivity: function(){
                     this.editor.activity_id = null
                     this.editor.activity = {
-                        title : "測試名稱",
-                        time : "",
-                        address : "",
-                        price : ""
+                        title   : "程式碼在唱歌 " + Math.ceil((Math.random()) * 200),
+                        time    : (new Date()).toLocaleString("zh-TW"),
+                        address : "大仁樓" + Math.ceil(100 +(Math.random()) * 300) + "室",
+                        price   : Math.ceil((Math.random()) * 20)*100
                     }
                 },
                 editorEditActivity : function ( activity_id , activity ){
