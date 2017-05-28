@@ -49,7 +49,7 @@ nav {
   display: flex;
   flex-wrap: wrap; }
   .items .item {
-    width: calc(50% - 20px * 2);
+    width: calc(50% - 20px * 2 );
     margin: 20px;
     padding: 20px; }
 
@@ -78,6 +78,17 @@ nav {
       line-height: 2.5rem;
       background: #dadada;
       color: white; }
+  .item footer {
+    text-align: right;
+    display: block;
+    position: relative;
+    width: 100%;
+    letter-spacing: 0.3em; }
+    .item footer .bn {
+      color: #dadada;
+      cursor: pointer; }
+      .item footer .bn:hover {
+        color: #84af1b; }
   .item dl {
     width: 100%;
     margin-bottom: 0; }
@@ -91,8 +102,9 @@ nav {
       width: 2.5rem;
       padding-right: 0.5rem; }
     .item dl dd {
-      width: calc(100% - 2.5rem - 0.5rem); }
+      width: calc(100% - 2.5rem - 0.5rem ); }
 
 .tabs {
-    padding-left: 30px;
-}
+  padding-left: 30px; }
+
+/*# sourceMappingURL=style.css.map */
